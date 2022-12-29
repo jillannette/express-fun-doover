@@ -1,29 +1,32 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 
-//MYLOGGER IS A MIDDLEWARE FUNCTION.  SIMPLE FUNCTION
-//USED TO INSERT THE MIDDLEWARE FUNCTION FIRST THEN 
-//GET THE REQUEST AND RESPONSE OBJECTS.  NEXT GOES TO 
-//THE NEXT MIDDLEWARE FUNCTION.
-const myLogger = (request, response, next) => {
-  console.log('LOGGED');
+const first = (req, res, next) => {
+  console.log("First");
   next();
-  //NEXT IS OPTIONAL.  IF NEXT IS REPLACED WITH RESPONSE.SEND, 
-  //THE ROUTE WILL NEVER GET TO APP.GET RESPONSE.  
 };
 
-//TELLS EXPRESS APP TO USE THIS FUNCTION BETWEEN EVERY REQUEST
-// AND RESPONSE
-app.use(myLogger);
+const second = (req, res, next) => {
+  console.log("Second");
+  next();
+};
 
-app.get('/', function (request, response) {
-  response.send('Hello World!');
+const third = (req, res, next) => {
+  console.log("Third");
+  next();
+};
+
+app.use(first);
+app.use(second);
+app.use(third);
+
+app.get("/", function (req, res) {
+  res.send("Hello World!");
 });
-//IN BROWSER, 'HELLO WORLD!' PRINTS, IN CONSOLE, LOGGED PRINTS. EVERY
-//REFRESH WILL PRINT LOGGED AGAIN AND AGAIN.  THERE CAN BE MORE THAN 
-//ONE MIDDLEWARE FUNCTIONS.  EACH FUNCTION GETS APP.USE(NAMEOFFUNCTION).
-//EACH MIDDLEWARE FUNCTION CAN SEND EITHER A RESPONSE OR INVOKE NEXT();
-
+//BROWSER PRINTS HELLO WORLD, TERMINAL CONSOLE LOGS FIRST, SECOND, THIRD
+//First
+//Second
+//Third
 
 app.listen(8000);
 
